@@ -331,26 +331,29 @@ CloseKeyPresser:
 Return
 
 ; ------------------------
-; F8 toggles Key Presser automation
+; F8 toggles Key Presser automation (modified to check if all keys are disabled)
 ; ------------------------
 KP_Toggle:
-    global KP_Running
+    global KP_Running, KeyEnabled1, KeyEnabled2, KeyEnabled3, KeyEnabled4
+    ; Check if all presser keys are disabled
+    if (KeyEnabled1 = 0 and KeyEnabled2 = 0 and KeyEnabled3 = 0 and KeyEnabled4 = 0) {
+         GuiControl, 2:, KP_Status, All Keys Disabled
+         return
+    }
     KP_Running := !KP_Running
     Gui 2:Submit, NoHide
     GuiControl, 2:, KP_Status, % KP_Running ? "Started" : "Stopped"
     if (KP_Running) {
-        KP_StartAutomation()
+         KP_StartAutomation()
     } else {
-        KP_StopAutomation()
+         KP_StopAutomation()
     }
     UpdateStatusBox()
 Return
 
 KP_StartAutomation() {
-    global KP_Running, KP_Counter1, KP_Counter2, KP_Counter3, KP_Counter4
-    global KeyEnabled1, KeyEnabled2, KeyEnabled3, KeyEnabled4
-    KP_Counter1 := 0, KP_Counter2 := 0, KP_Counter3 := 0, KP_Counter4 := 0
-    ; Do not reset key states here – leave them as toggled.
+    global KP_Running, KeyEnabled1, KeyEnabled2, KeyEnabled3, KeyEnabled4
+    ; Start automation without resetting counts
     delayVal := GuiControlGetDelay(1)
     SetTimer, KP_KeyPress1, % delayVal
     delayVal := GuiControlGetDelay(2)
@@ -384,19 +387,20 @@ KP_StopAutomation() {
     UpdateStatusBox()
 }
 
-; --- Timer Routines ---
+; --- Timer Routines (Modified to update Max Count) ---
 KP_KeyPress1:
-    global KP_Running, KeyEnabled1, KP_Counter1
+    global KP_Running, KeyEnabled1
     if (!KP_Running or KeyEnabled1 = 0) {
          SetTimer, KP_KeyPress1, Off
          Return
     }
     KP_SendKey(1)
-    KP_Counter1++
     GuiControlGet, enforce, 2:, KP_MaxCountEnabled1
     if (enforce = 1) {
-         GuiControlGet, maxCount, 2:, KP_MaxCount1
-         if (KP_Counter1 >= maxCount) {
+         GuiControlGet, remaining, 2:, KP_MaxCount1
+         remaining := remaining - 1
+         GuiControl, 2:, KP_MaxCount1, %remaining%
+         if (remaining <= 0) {
               SetTimer, KP_KeyPress1, Off
               KeyEnabled1 := 0
               GuiControl, 2:, KP_Button1, Disabled
@@ -408,17 +412,18 @@ KP_KeyPress1:
 Return
 
 KP_KeyPress2:
-    global KP_Running, KeyEnabled2, KP_Counter2
+    global KP_Running, KeyEnabled2
     if (!KP_Running or KeyEnabled2 = 0) {
          SetTimer, KP_KeyPress2, Off
          Return
     }
     KP_SendKey(2)
-    KP_Counter2++
     GuiControlGet, enforce, 2:, KP_MaxCountEnabled2
     if (enforce = 1) {
-         GuiControlGet, maxCount, 2:, KP_MaxCount2
-         if (KP_Counter2 >= maxCount) {
+         GuiControlGet, remaining, 2:, KP_MaxCount2
+         remaining := remaining - 1
+         GuiControl, 2:, KP_MaxCount2, %remaining%
+         if (remaining <= 0) {
               SetTimer, KP_KeyPress2, Off
               KeyEnabled2 := 0
               GuiControl, 2:, KP_Button2, Disabled
@@ -430,17 +435,18 @@ KP_KeyPress2:
 Return
 
 KP_KeyPress3:
-    global KP_Running, KeyEnabled3, KP_Counter3
+    global KP_Running, KeyEnabled3
     if (!KP_Running or KeyEnabled3 = 0) {
          SetTimer, KP_KeyPress3, Off
          Return
     }
     KP_SendKey(3)
-    KP_Counter3++
     GuiControlGet, enforce, 2:, KP_MaxCountEnabled3
     if (enforce = 1) {
-         GuiControlGet, maxCount, 2:, KP_MaxCount3
-         if (KP_Counter3 >= maxCount) {
+         GuiControlGet, remaining, 2:, KP_MaxCount3
+         remaining := remaining - 1
+         GuiControl, 2:, KP_MaxCount3, %remaining%
+         if (remaining <= 0) {
               SetTimer, KP_KeyPress3, Off
               KeyEnabled3 := 0
               GuiControl, 2:, KP_Button3, Disabled
@@ -452,17 +458,18 @@ KP_KeyPress3:
 Return
 
 KP_KeyPress4:
-    global KP_Running, KeyEnabled4, KP_Counter4
+    global KP_Running, KeyEnabled4
     if (!KP_Running or KeyEnabled4 = 0) {
          SetTimer, KP_KeyPress4, Off
          Return
     }
     KP_SendKey(4)
-    KP_Counter4++
     GuiControlGet, enforce, 2:, KP_MaxCountEnabled4
     if (enforce = 1) {
-         GuiControlGet, maxCount, 2:, KP_MaxCount4
-         if (KP_Counter4 >= maxCount) {
+         GuiControlGet, remaining, 2:, KP_MaxCount4
+         remaining := remaining - 1
+         GuiControl, 2:, KP_MaxCount4, %remaining%
+         if (remaining <= 0) {
               SetTimer, KP_KeyPress4, Off
               KeyEnabled4 := 0
               GuiControl, 2:, KP_Button4, Disabled
