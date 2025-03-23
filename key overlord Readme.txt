@@ -1,103 +1,137 @@
-Key Automation Script – User Guide
-====================================
+==============================================
+         Automated Key Actions Script
+             README / Documentation
+==============================================
 
 Overview:
----------
-This AutoHotkey script automates keyboard actions. It has three main modes:
+-----------
+This AutoHotkey script automates various keyboard actions by offering three main modes:
+1. Enter Commands – Configure dynamic hotkey sequences that send custom text.
+2. Key Holder – Toggle and hold down a selected key.
+3. Key Presser – Automate repeated key presses with customizable delays, hold times, and repetition limits.
 
-1. Enter Commands Mode
-   - Create custom sequences that simulate key presses and type text.
-2. Key Holder Mode
-   - Hold down a chosen key continuously (toggled with F8).
-3. Key Presser Mode
-   - Automatically press one or more keys repeatedly using user-defined settings such as delay, hold time, maximum count, and enable/disable toggles.
+All user settings are saved in "settings.ini" and loaded automatically at startup.
+A small Status Box (colored red or green) indicates whether any automation is active.
 
-A small status box appears at the top of your screen:
-   - Red means automation is inactive.
-   - Green means automation is active.
+------------------------------------------------
+Main Menu (GUI #1)
+------------------------------------------------
+When the script is launched, the Main Menu appears with the following buttons:
+• Enter Commands
+  - Opens the Enter Commands mode (GUI #4) to configure hotkey-triggered text sequences.
+• Key Holder
+  - Opens the Key Holder mode (GUI #3) to select and toggle a key to hold down.
+• Key Presser
+  - Opens the Key Presser mode (GUI #2) to automate repeated key presses.
+• Exit
+  - Saves settings and exits the script.
 
-How to Run the Script:
-----------------------
-1. Install AutoHotkey:
-   - Download and install AutoHotkey from https://www.autohotkey.com/.
-2. Save the Script:
-   - Save the provided script as a file with a “.ahk” extension (for example, KeyAutomation.ahk).
-3. Run the Script:
-   - Double-click the .ahk file to launch the script. The main menu will appear.
+------------------------------------------------
+Mode 1: Enter Commands (GUI #4)
+------------------------------------------------
+Purpose:
+Configure up to three separate command sequences that are activated by specific trigger keys.
 
-Main Menu:
-----------
-When you run the script, you see a main menu with these options:
-   - Enter Commands: Opens the mode for creating custom key sequences.
-   - Key Holder: Opens the mode for holding a selected key down.
-   - Key Presser: Opens the mode for automatically pressing keys repeatedly.
-   - Exit: Closes the script.
+For Each Sequence (First, Second, Third):
+• First Key (DropDownList)
+  - Select the key to press at the beginning of the sequence.
+  - (Special note: if “grave” is selected, it is internally mapped to “SC029”.)
+• Enter Text to Type (Edit Field)
+  - Input the text that will be sent immediately after the first key is pressed.
+• Second Key (DropDownList)
+  - Select the key to press after the text is sent.
+• Trigger Key (DropDownList)
+  - Choose a function key (F8, F9, F10, etc.) that will activate this sequence.
 
-Mode Descriptions and Functions:
-----------------------------------
+Buttons:
+• Activate
+  - Submits the current settings, saves them, unbinds any previous triggers,
+    and binds the new trigger hotkeys so that pressing them runs the corresponding sequence.
+• Back
+  - Saves any changes, unbinds the active hotkeys, and returns to the Main Menu.
 
-1. Enter Commands Mode (GUI #4):
-   - Purpose:
-     * Create sequences that simulate key presses and type text.
-   - How It Works:
-     * You choose a “First Key” to press.
-     * You enter text that you want the script to type.
-     * You choose a “Second Key” to press after the text.
-     * You select a trigger key (such as F8) that, when pressed, runs this sequence.
-   - Usage:
-     * Set up your sequence, click “Activate,” and then press the trigger key to run it.
+------------------------------------------------
+Mode 2: Key Holder (GUI #3)
+------------------------------------------------
+Purpose:
+Allow the user to select one key to “hold down” (simulate continuously pressing the key).
 
-2. Key Holder Mode (GUI #3):
-   - Purpose:
-     * Hold down a chosen key continuously.
-   - How It Works:
-     * You select a key from a drop-down list.
-     * Pressing F8 toggles the key “down” (held) or “up” (released).
-   - Usage:
-     * Choose your key, press F8 to hold it down, and press F8 again to release it.
+Elements:
+• Key Selection (DropDownList)
+  - Choose a key from a predefined list (e.g., up, down, letters, function keys, mouse buttons).
+• Reset Button
+  - Resets the drop-down to the default value (usually "e").
+• Status Display (Text)
+  - Shows “Stopped” or “Holding Key” based on whether the key is currently held.
+• Back Button
+  - Exits Key Holder mode, releases the held key (if active), saves settings, and returns to Main Menu.
 
-3. Key Presser Mode (GUI #2):
-   - Purpose:
-     * Automatically press one or more keys repeatedly.
-   - How It Works:
-     * For up to four keys, you set the following options:
-         - Key Choice: Which key to press.
-         - Delay (ms): Time between key presses.
-         - Hold Time (ms): How long the key is held down.
-         - Max Count: The number of times the key is pressed.
-         - Enforce Checkbox: When checked, the script will stop pressing that key once the maximum count is reached.
-         - Enable/Disable Button: Lets you manually turn a key’s automation on or off.
-     * The script uses timers to send the key presses.
-     * An auto-stop function monitors keys that are set to “Enforce” a maximum count. When all such keys reach their maximum count, the automation stops automatically.
-   - Usage:
-     * Set your desired options for each key.
-     * Use the enable/disable buttons to control each key.
-     * Press F8 to start or stop the automated key pressing.
-     * The status box will change to green when automation is active.
+Hotkey:
+• F8 is used to toggle the holding action on and off.
 
-• Universal Close:
-  - If any window is closed (for example, clicking the “X” button), the script exits completely.
+------------------------------------------------
+Mode 3: Key Presser (GUI #2)
+------------------------------------------------
+Purpose:
+Automate the pressing of up to four different keys with customizable parameters.
 
-Important Notes:
-----------------
-• No Coding Experience Needed:
-  - You do not need to modify the script. Simply choose the mode you want and use the provided drop-down menus and buttons.
+For Each Key (Key 1 to Key 4):
+• Key Choice (DropDownList)
+  - Select which key should be automatically pressed.
+• Delay (Edit Field)
+  - Specify the delay (in milliseconds) between each cycle of key presses.
+• Hold Time (Edit Field)
+  - Define how long (in milliseconds) the key is held down during each press.
+• Max Count (Edit Field)
+  - Set the maximum number of times the key will be pressed before the automation stops.
+• Enforce Checkbox
+  - When checked, the script will enforce the max count limit; once the limit is reached, the key’s automation stops.
+• Toggle Button (Next to Each Key)
+  - Displays “Enabled” or “Disabled.” Clicking the button toggles the automation state for that key.
   
-• Customization:
-  - Advanced users may edit the script in AutoHotkey if needed, but the default settings are pre-configured for typical use.
+Additional Elements:
+• Repeat Continuously Checkbox
+  - When checked, the key press sequences repeat indefinitely until manually stopped.
+• Status Label (Text)
+  - Shows “Started” when automation is running and “Stopped” when it is not.
+• Back Button
+  - Saves all changes, stops any active automation, and returns to the Main Menu.
 
-• Status Indicators:
-  - Always check the status box at the top:
-      - Red indicates automation is off.
-      - Green indicates automation is running.
+Hotkey:
+• F8 toggles the overall Key Presser automation on or off.
+• Individual key timers use the specified delay values to send key presses.
+• When a key’s max count (if enforced) reaches zero, its automation stops and the corresponding toggle button is disabled.
 
-Troubleshooting:
-----------------
-• If a key continues to be pressed even when it appears disabled:
-  - Ensure that you have clicked the correct enable/disable button.
-  - Make sure you are using F8 to start/stop automation in the respective modes.
-  - Check the “Enforce” option in Key Presser mode if you want the automation to stop after a set number of presses.
+------------------------------------------------
+Settings and Global Functions:
+------------------------------------------------
+• The script uses a settings.ini file to store all user preferences (keys, delays, counts, etc.).
+• LoadSettings() and SaveSettings() are called on startup and exit to maintain user settings.
+• The Status Box:
+  - A small window on the screen that displays a red color when inactive and green when any automation is running.
+• Global variables are used to keep track of previous trigger keys and current automation states.
 
-Enjoy your automated key control and refer to this guide whenever you need assistance with the script.
+------------------------------------------------
+Usage Instructions:
+------------------------------------------------
+1. Run the script to display the Main Menu.
+2. Choose your desired mode:
+   - Use Enter Commands for hotkey-based text sequences.
+   - Use Key Holder to simulate holding down a key.
+   - Use Key Presser for repeated key presses with customizable timing.
+3. Adjust the dropdowns, text fields, check boxes, and buttons to suit your needs.
+4. Activate the desired automation using the provided buttons or hotkeys.
+5. Return to the Main Menu using the “Back” buttons. Settings are saved automatically.
+6. Exit the script by clicking “Exit” on the Main Menu.
 
-End of README
+------------------------------------------------
+Important Notes:
+------------------------------------------------
+• This script simulates keyboard input and may affect other running applications.
+• Ensure that the selected keys and settings do not interfere with your normal computer operations.
+• The “Enforce” checkboxes in Key Presser mode help limit the number of key presses.
+• The script includes error checking (e.g., ensuring a key is selected before holding it down).
+
+==============================================
+                End of Documentation
+==============================================
