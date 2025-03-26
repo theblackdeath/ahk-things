@@ -1,6 +1,37 @@
 #NoEnv
 #SingleInstance Force
 
+;--------------------------------------------------
+; Helper function to convert word names for digits to numeric digits.
+; If the key is "one" it returns "1", "two" returns "2", etc.
+ConvertKey(key) {
+    key := Trim(key)
+    StringLower, keyLower, key
+    if (keyLower = "one")
+        return "1"
+    else if (keyLower = "two")
+        return "2"
+    else if (keyLower = "three")
+        return "3"
+    else if (keyLower = "four")
+        return "4"
+    else if (keyLower = "five")
+        return "5"
+    else if (keyLower = "six")
+        return "6"
+    else if (keyLower = "seven")
+        return "7"
+    else if (keyLower = "eight")
+        return "8"
+    else if (keyLower = "nine")
+        return "9"
+    else if (keyLower = "zero")
+        return "0"
+    else
+        return key
+}
+
+;--------------------------------------------------
 ; Global variable to store previous trigger keys
 Prev_TriggerKey1 := ""
 Prev_TriggerKey2 := ""
@@ -83,6 +114,7 @@ LoadSettings() {
         EC_TriggerKey3 := "F10"
 
     ; --- Key Holder Section ---
+    ; Added "space" to the Key Holder dropdown below.
     IniRead, DefaultKHKey, %IniFile%, KeyHolder, KeyChoice, e
     DefaultKHKey := Trim(DefaultKHKey)
     if (DefaultKHKey = "")
@@ -325,31 +357,31 @@ OpenEnterCommands:
     ; --- First Sequence ---
     Gui 4:Add, Text, x20 y20 w200 h20, **First Sequence**
     Gui 4:Add, Text, x20 y50 w200 h20, Select First Key:
-    Gui 4:Add, DropDownList, vEC_FirstKey1 x150 y50 w200, grave|1|2|3|4|5|6|7|8|9|0|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|enter|tab|space|shift|ctrl|alt|esc|f1|f2|f3|f4|f5|f6|f7|f8|f9|f10|f11|f12|up|down|left|right|home|end|pgup|pgdn|insert|delete|backspace|capslock|numlock|scrolllock|printscreen|pause|appskey|browser_back|browser_forward|browser_refresh|browser_stop|browser_search|browser_favorites|browser_home|volume_mute|volume_down|volume_up|media_next|media_prev|media_stop|media_play_pause|launch_mail|launch_media|launch_app1|launch_app2
+    Gui 4:Add, DropDownList, vEC_FirstKey1 x150 y50 w200, grave|one|two|three|four|five|six|seven|eight|nine|zero|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|enter|tab|space|shift|ctrl|alt|esc|f1|f2|f3|f4|f5|f6|f7|f8|f9|f10|f11|f12|up|down|left|right|home|end|pgup|pgdn|insert|delete|backspace|capslock|numlock|scrolllock|printscreen|pause|appskey|browser_back|browser_forward|browser_refresh|browser_stop|browser_search|browser_favorites|browser_home|volume_mute|volume_down|volume_up|media_next|media_prev|media_stop|media_play_pause|launch_mail|launch_media|launch_app1|launch_app2
     Gui 4:Add, Text, x20 y80 w200 h20, Enter Text to Type:
     Gui 4:Add, Edit, vEC_InputText1 x150 y80 w200 h20, %EC_InputText1%
     Gui 4:Add, Text, x20 y110 w200 h20, Select Second Key:
-    Gui 4:Add, DropDownList, vEC_SecondKey1 x150 y110 w200, enter|1|2|3|4|5|6|7|8|9|0|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|tab|space|shift|ctrl|alt|esc|f1|f2|f3|f4|f5|f6|f7|f8|f9|f10|f11|f12|up|down|left|right|home|end|pgup|pgdn|insert|delete|backspace|capslock|numlock|scrolllock|printscreen|pause|appskey|browser_back|browser_forward|browser_refresh|browser_stop|browser_search|browser_favorites|browser_home|volume_mute|volume_down|volume_up|media_next|media_prev|media_stop|media_play_pause|launch_mail|launch_media|launch_app1|launch_app2
+    Gui 4:Add, DropDownList, vEC_SecondKey1 x150 y110 w200, enter|one|two|three|four|five|six|seven|eight|nine|zero|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|tab|space|shift|ctrl|alt|esc|f1|f2|f3|f4|f5|f6|f7|f8|f9|f10|f11|f12|up|down|left|right|home|end|pgup|pgdn|insert|delete|backspace|capslock|numlock|scrolllock|printscreen|pause|appskey|browser_back|browser_forward|browser_refresh|browser_stop|browser_search|browser_favorites|browser_home|volume_mute|volume_down|volume_up|media_next|media_prev|media_stop|media_play_pause|launch_mail|launch_media|launch_app1|launch_app2
     Gui 4:Add, Text, x20 y140 w200 h20, Select Trigger Key:
     Gui 4:Add, DropDownList, vEC_TriggerKey1 x150 y140 w200, F8|F1|F2|F3|F4|F5|F6|F7|F9|F10|F11|F12
     ; --- Second Sequence ---
     Gui 4:Add, Text, x20 y180 w200 h20, **Second Sequence**
     Gui 4:Add, Text, x20 y210 w200 h20, Select First Key:
-    Gui 4:Add, DropDownList, vEC_FirstKey2 x150 y210 w200, grave|1|2|3|4|5|6|7|8|9|0|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|enter|tab|space|shift|ctrl|alt|esc|f1|f2|f3|f4|f5|f6|f7|f8|f9|f10|f11|f12|up|down|left|right|home|end|pgup|pgdn|insert|delete|backspace|capslock|numlock|scrolllock|printscreen|pause|appskey|browser_back|browser_forward|browser_refresh|browser_stop|browser_search|browser_favorites|browser_home|volume_mute|volume_down|volume_up|media_next|media_prev|media_stop|media_play_pause|launch_mail|launch_media|launch_app1|launch_app2
+    Gui 4:Add, DropDownList, vEC_FirstKey2 x150 y210 w200, grave|one|two|three|four|five|six|seven|eight|nine|zero|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|enter|tab|space|shift|ctrl|alt|esc|f1|f2|f3|f4|f5|f6|f7|f8|f9|f10|f11|f12|up|down|left|right|home|end|pgup|pgdn|insert|delete|backspace|capslock|numlock|scrolllock|printscreen|pause|appskey|browser_back|browser_forward|browser_refresh|browser_stop|browser_search|browser_favorites|browser_home|volume_mute|volume_down|volume_up|media_next|media_prev|media_stop|media_play_pause|launch_mail|launch_media|launch_app1|launch_app2
     Gui 4:Add, Text, x20 y240 w200 h20, Enter Text to Type:
     Gui 4:Add, Edit, vEC_InputText2 x150 y240 w200 h20, %EC_InputText2%
     Gui 4:Add, Text, x20 y270 w200 h20, Select Second Key:
-    Gui 4:Add, DropDownList, vEC_SecondKey2 x150 y270 w200, enter|1|2|3|4|5|6|7|8|9|0|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|tab|space|shift|ctrl|alt|esc|f1|f2|f3|f4|f5|f6|f7|f8|f9|f10|f11|f12|up|down|left|right|home|end|pgup|pgdn|insert|delete|backspace|capslock|numlock|scrolllock|printscreen|pause|appskey|browser_back|browser_forward|browser_refresh|browser_stop|browser_search|browser_favorites|browser_home|volume_mute|volume_down|volume_up|media_next|media_prev|media_stop|media_play_pause|launch_mail|launch_media|launch_app1|launch_app2
+    Gui 4:Add, DropDownList, vEC_SecondKey2 x150 y270 w200, enter|one|two|three|four|five|six|seven|eight|nine|zero|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|tab|space|shift|ctrl|alt|esc|f1|f2|f3|f4|f5|f6|f7|f8|f9|f10|f11|f12|up|down|left|right|home|end|pgup|pgdn|insert|delete|backspace|capslock|numlock|scrolllock|printscreen|pause|appskey|browser_back|browser_forward|browser_refresh|browser_stop|browser_search|browser_favorites|browser_home|volume_mute|volume_down|volume_up|media_next|media_prev|media_stop|media_play_pause|launch_mail|launch_media|launch_app1|launch_app2
     Gui 4:Add, Text, x20 y300 w200 h20, Select Trigger Key:
     Gui 4:Add, DropDownList, vEC_TriggerKey2 x150 y300 w200, F9|F1|F2|F3|F4|F5|F6|F7|F8|F10|F11|F12
     ; --- Third Sequence ---
     Gui 4:Add, Text, x20 y340 w200 h20, **Third Sequence**
     Gui 4:Add, Text, x20 y370 w200 h20, Select First Key:
-    Gui 4:Add, DropDownList, vEC_FirstKey3 x150 y370 w200, grave|1|2|3|4|5|6|7|8|9|0|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|enter|tab|space|shift|ctrl|alt|esc|f1|f2|f3|f4|f5|f6|f7|f8|f9|f10|f11|f12|up|down|left|right|home|end|pgup|pgdn|insert|delete|backspace|capslock|numlock|scrolllock|printscreen|pause|appskey|browser_back|browser_forward|browser_refresh|browser_stop|browser_search|browser_favorites|browser_home|volume_mute|volume_down|volume_up|media_next|media_prev|media_stop|media_play_pause|launch_mail|launch_media|launch_app1|launch_app2
+    Gui 4:Add, DropDownList, vEC_FirstKey3 x150 y370 w200, grave|one|two|three|four|five|six|seven|eight|nine|zero|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|enter|tab|space|shift|ctrl|alt|esc|f1|f2|f3|f4|f5|f6|f7|f8|f9|f10|f11|f12|up|down|left|right|home|end|pgup|pgdn|insert|delete|backspace|capslock|numlock|scrolllock|printscreen|pause|appskey|browser_back|browser_forward|browser_refresh|browser_stop|browser_search|browser_favorites|browser_home|volume_mute|volume_down|volume_up|media_next|media_prev|media_stop|media_play_pause|launch_mail|launch_media|launch_app1|launch_app2
     Gui 4:Add, Text, x20 y400 w200 h20, Enter Text to Type:
     Gui 4:Add, Edit, vEC_InputText3 x150 y400 w200 h20, %EC_InputText3%
     Gui 4:Add, Text, x20 y430 w200 h20, Select Second Key:
-    Gui 4:Add, DropDownList, vEC_SecondKey3 x150 y430 w200, enter|1|2|3|4|5|6|7|8|9|0|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|tab|space|shift|ctrl|alt|esc|f1|f2|f3|f4|f5|f6|f7|f8|f9|f10|f11|f12|up|down|left|right|home|end|pgup|pgdn|insert|delete|backspace|capslock|numlock|scrolllock|printscreen|pause|appskey|browser_back|browser_forward|browser_refresh|browser_stop|browser_search|browser_favorites|browser_home|volume_mute|volume_down|volume_up|media_next|media_prev|media_stop|media_play_pause|launch_mail|launch_media|launch_app1|launch_app2
+    Gui 4:Add, DropDownList, vEC_SecondKey3 x150 y430 w200, enter|one|two|three|four|five|six|seven|eight|nine|zero|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|tab|space|shift|ctrl|alt|esc|f1|f2|f3|f4|f5|f6|f7|f8|f9|f10|f11|f12|up|down|left|right|home|end|pgup|pgdn|insert|delete|backspace|capslock|numlock|scrolllock|printscreen|pause|appskey|browser_back|browser_forward|browser_refresh|browser_stop|browser_search|browser_favorites|browser_home|volume_mute|volume_down|volume_up|media_next|media_prev|media_stop|media_play_pause|launch_mail|launch_media|launch_app1|launch_app2
     Gui 4:Add, Text, x20 y460 w200 h20, Select Trigger Key:
     Gui 4:Add, DropDownList, vEC_TriggerKey3 x150 y460 w200, F10|F1|F2|F3|F4|F5|F6|F7|F8|F9|F11|F12
     ; --- Force drop-down controls to choose the stored values:
@@ -400,8 +432,8 @@ CloseEnter:
     Gui 4:Submit, NoHide
     SaveSettings()
     Try Hotkey, *%EC_TriggerKey1%, Off
-	Try Hotkey, *%EC_TriggerKey2%, Off
-	Try Hotkey, *%EC_TriggerKey3%, Off
+    Try Hotkey, *%EC_TriggerKey2%, Off
+    Try Hotkey, *%EC_TriggerKey3%, Off
     Gui 4:Destroy
     Gui 1:Show
 Return
@@ -409,54 +441,66 @@ Return
 EC_Sequence1:
 {
     if (EC_FirstKey1 = "grave")
-        EC_FirstKey1 := "SC029"
+        key1 := "SC029"
+    else
+        key1 := ConvertKey(EC_FirstKey1)
     if (EC_SecondKey1 = "grave")
-        EC_SecondKey1 := "SC029"
-    Send, {%EC_FirstKey1% down}
+        key2 := "SC029"
+    else
+        key2 := ConvertKey(EC_SecondKey1)
+    Send, {%key1% down}
     Sleep, 50
-    Send, {%EC_FirstKey1% up}
+    Send, {%key1% up}
     Sleep, 150
     SendInput, %EC_InputText1%
     Sleep, 150
-    Send, {%EC_SecondKey1% down}
+    Send, {%key2% down}
     Sleep, 50
-    Send, {%EC_SecondKey1% up}
+    Send, {%key2% up}
 }
 Return
 
 EC_Sequence2:
 {
     if (EC_FirstKey2 = "grave")
-        EC_FirstKey2 := "SC029"
+        key1 := "SC029"
+    else
+        key1 := ConvertKey(EC_FirstKey2)
     if (EC_SecondKey2 = "grave")
-        EC_SecondKey2 := "SC029"
-    Send, {%EC_FirstKey2% down}
+        key2 := "SC029"
+    else
+        key2 := ConvertKey(EC_SecondKey2)
+    Send, {%key1% down}
     Sleep, 50
-    Send, {%EC_FirstKey2% up}
+    Send, {%key1% up}
     Sleep, 150
     SendInput, %EC_InputText2%
     Sleep, 150
-    Send, {%EC_SecondKey2% down}
+    Send, {%key2% down}
     Sleep, 50
-    Send, {%EC_SecondKey2% up}
+    Send, {%key2% up}
 }
 Return
 
 EC_Sequence3:
 {
     if (EC_FirstKey3 = "grave")
-        EC_FirstKey3 := "SC029"
+        key1 := "SC029"
+    else
+        key1 := ConvertKey(EC_FirstKey3)
     if (EC_SecondKey3 = "grave")
-        EC_SecondKey3 := "SC029"
-    Send, {%EC_FirstKey3% down}
+        key2 := "SC029"
+    else
+        key2 := ConvertKey(EC_SecondKey3)
+    Send, {%key1% down}
     Sleep, 50
-    Send, {%EC_FirstKey3% up}
+    Send, {%key1% up}
     Sleep, 150
     SendInput, %EC_InputText3%
     Sleep, 150
-    Send, {%EC_SecondKey3% down}
+    Send, {%key2% down}
     Sleep, 50
-    Send, {%EC_SecondKey3% up}
+    Send, {%key2% up}
 }
 Return
 
@@ -468,8 +512,9 @@ OpenKeyHolder:
     Gui 3:Destroy
     Gui 3:Default
     KH_Running := false
+    ; Added "space" to the Key Holder dropdown options.
     Gui 3:Add, Text, x20 y20 w200 h20, Select Key to Hold Down: F8 Toggles
-    Gui 3:Add, DropDownList, vKH_KeyChoice x20 y50 w140, |up|down|left|right|f1|f2|f3|f4|f5|f6|f7|f8|f9|f10|f11|f12|lbutton|rbutton|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|0|1|2|3|4|5|6|7|8|9
+    Gui 3:Add, DropDownList, vKH_KeyChoice x20 y50 w140, |up|down|left|right|space|f1|f2|f3|f4|f5|f6|f7|f8|f9|f10|f11|f12|lbutton|rbutton|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|0|1|2|3|4|5|6|7|8|9
     Gui 3:Add, Button, x170 y50 w60 h20 gKH_Reset, Reset
     Gui 3:Add, Text, vKH_Status x20 y90 w200 h30, Stopped
     Gui 3:Add, Button, x20 y140 w100 h30 gCloseKeyHolder, Back
@@ -528,7 +573,8 @@ OpenKeyPresser:
     Gui 1:Hide
     Gui 2:Destroy
     Gui 2:Default
-    KeyOptions := "|up|down|left|right|f1|f2|f3|f4|f5|f6|f7|f8|f9|f10|f11|f12|lbutton|rbutton|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|0|1|2|3|4|5|6|7|8|9"
+    ; Added "space" to the KeyOptions list.
+    KeyOptions := "|up|down|left|right|f1|f2|f3|f4|f5|f6|f7|f8|f9|f10|f11|f12|lbutton|rbutton|space|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|one|two|three|four|five|six|seven|eight|nine|zero"
     Gui 2:Add, Text, x20 y20 w200 h20, Press F8 to start/stop key presses:
     ; --- Key 1 ---
     Gui 2:Add, Text, x20 y40 w100 h20, Key 1:
@@ -783,14 +829,18 @@ KP_KeyPress4:
 Return
 
 ;--- Helper functions for Key Presser ---
+; Modified KP_SendKey now implements a hold:
 KP_SendKey(n) {
-    global KeyEnabled1, KeyEnabled2, KeyEnabled3, KeyEnabled4
-    if ((n = 1 and KeyEnabled1 = 0) or (n = 2 and KeyEnabled2 = 0) or (n = 3 and KeyEnabled3 = 0) or (n = 4 and KeyEnabled4 = 0))
-        return
     GuiControlGet, curKey, 2:, KP_KeyChoice%n%
     curKey := Trim(curKey)
-    if (curKey != "")
-        SendInput, {%curKey%}
+    if (curKey != "") {
+        curKey := ConvertKey(curKey)
+        ; Retrieve the hold time for key n
+        GuiControlGet, holdTime, 2:, KP_HoldTime%n%
+        SendInput, {%curKey% down}
+        Sleep, %holdTime%
+        SendInput, {%curKey% up}
+    }
 }
 
 GuiControlGetDelay(n) {
