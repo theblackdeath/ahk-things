@@ -512,9 +512,9 @@ OpenKeyHolder:
     Gui 3:Destroy
     Gui 3:Default
     KH_Running := false
-    ; Added "space" to the Key Holder dropdown options.
+    ; Added "enter" to the Key Holder dropdown options.
     Gui 3:Add, Text, x20 y20 w200 h20, Select Key to Hold Down: F8 Toggles
-    Gui 3:Add, DropDownList, vKH_KeyChoice x20 y50 w140, |up|down|left|right|space|f1|f2|f3|f4|f5|f6|f7|f8|f9|f10|f11|f12|lbutton|rbutton|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|0|1|2|3|4|5|6|7|8|9
+    Gui 3:Add, DropDownList, vKH_KeyChoice x20 y50 w140, |up|down|left|right|enter|space|f1|f2|f3|f4|f5|f6|f7|f8|f9|f10|f11|f12|lbutton|rbutton|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|0|1|2|3|4|5|6|7|8|9
     Gui 3:Add, Button, x170 y50 w60 h20 gKH_Reset, Reset
     Gui 3:Add, Text, vKH_Status x20 y90 w200 h30, Stopped
     Gui 3:Add, Button, x20 y140 w100 h30 gCloseKeyHolder, Back
@@ -573,8 +573,8 @@ OpenKeyPresser:
     Gui 1:Hide
     Gui 2:Destroy
     Gui 2:Default
-    ; Added "space" to the KeyOptions list.
-    KeyOptions := "|up|down|left|right|f1|f2|f3|f4|f5|f6|f7|f8|f9|f10|f11|f12|lbutton|rbutton|space|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|one|two|three|four|five|six|seven|eight|nine|zero"
+    ; Added "enter" and "Ctrl+V" to the KeyOptions list.
+    KeyOptions := "|up|down|left|right|enter|f1|f2|f3|f4|f5|f6|f7|f8|f9|f10|f11|f12|lbutton|rbutton|space|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|one|two|three|four|five|six|seven|eight|nine|zero|Ctrl+V"
     Gui 2:Add, Text, x20 y20 w200 h20, Press F8 to start/stop key presses:
     ; --- Key 1 ---
     Gui 2:Add, Text, x20 y40 w100 h20, Key 1:
@@ -587,6 +587,7 @@ OpenKeyPresser:
     Gui 2:Add, Edit, vKP_MaxCount1 x120 y130 w100 h20, %DefaultMaxCount1%
     enforceState1 := (DefaultEnforce1 = 1 ? "Checked" : "")
     Gui 2:Add, CheckBox, vKP_MaxCountEnabled1 x230 y130 w120 h20 %enforceState1%, Enforce
+    GuiControl, 2:, KP_MaxCountEnabled1, % (DefaultEnforce1 = 1 ? "Checked" : "Off")
     Gui 2:Add, Button, vKP_Button1 gKP_ToggleKey1 x120 y160 w100 h20, % (KeyEnabled1 ? "Enabled" : "Disabled")
     ; --- Key 2 ---
     Gui 2:Add, Text, x20 y200 w100 h20, Key 2:
@@ -599,6 +600,7 @@ OpenKeyPresser:
     Gui 2:Add, Edit, vKP_MaxCount2 x120 y290 w100 h20, %DefaultMaxCount2%
     enforceState2 := (DefaultEnforce2 = 1 ? "Checked" : "")
     Gui 2:Add, CheckBox, vKP_MaxCountEnabled2 x230 y290 w120 h20 %enforceState2%, Enforce
+    GuiControl, 2:, KP_MaxCountEnabled2, % (DefaultEnforce2 = 1 ? "Checked" : "Off")
     Gui 2:Add, Button, vKP_Button2 gKP_ToggleKey2 x120 y320 w100 h20, % (KeyEnabled2 ? "Enabled" : "Disabled")
     ; --- Key 3 ---
     Gui 2:Add, Text, x20 y360 w100 h20, Key 3:
@@ -611,6 +613,7 @@ OpenKeyPresser:
     Gui 2:Add, Edit, vKP_MaxCount3 x120 y450 w100 h20, %DefaultMaxCount3%
     enforceState3 := (DefaultEnforce3 = 1 ? "Checked" : "")
     Gui 2:Add, CheckBox, vKP_MaxCountEnabled3 x230 y450 w120 h20 %enforceState3%, Enforce
+    GuiControl, 2:, KP_MaxCountEnabled3, % (DefaultEnforce3 = 1 ? "Checked" : "Off")
     Gui 2:Add, Button, vKP_Button3 gKP_ToggleKey3 x120 y480 w100 h20, % (KeyEnabled3 ? "Enabled" : "Disabled")
     ; --- Key 4 ---
     Gui 2:Add, Text, x20 y520 w100 h20, Key 4:
@@ -623,6 +626,7 @@ OpenKeyPresser:
     Gui 2:Add, Edit, vKP_MaxCount4 x120 y610 w100 h20, %DefaultMaxCount4%
     enforceState4 := (DefaultEnforce4 = 1 ? "Checked" : "")
     Gui 2:Add, CheckBox, vKP_MaxCountEnabled4 x230 y610 w120 h20 %enforceState4%, Enforce
+    GuiControl, 2:, KP_MaxCountEnabled4, % (DefaultEnforce4 = 1 ? "Checked" : "Off")
     Gui 2:Add, Button, vKP_Button4 gKP_ToggleKey4 x120 y640 w100 h20, % (KeyEnabled4 ? "Enabled" : "Disabled")
 
     Gui 2:Add, CheckBox, vKP_RepeatCheckBox x20 y670 w200 h20 Checked, Repeat Continuously
@@ -661,6 +665,12 @@ CloseKeyPresser:
     DefaultDelay4 := KP_DelayInput4
     DefaultHold4  := KP_HoldTime4
     DefaultMaxCount4 := KP_MaxCount4
+
+    ; Update the Enabled status from the current KeyEnabled values.
+    DefaultEnabled1 := KeyEnabled1
+    DefaultEnabled2 := KeyEnabled2
+    DefaultEnabled3 := KeyEnabled3
+    DefaultEnabled4 := KeyEnabled4
 
     ; Save Enforce checkbox states
     GuiControlGet, DefaultEnforce1, 2:, KP_MaxCountEnabled1
@@ -829,17 +839,26 @@ KP_KeyPress4:
 Return
 
 ;--- Helper functions for Key Presser ---
-; Modified KP_SendKey now implements a hold:
+; Modified KP_SendKey now implements a hold and special handling for Ctrl+V:
 KP_SendKey(n) {
     GuiControlGet, curKey, 2:, KP_KeyChoice%n%
     curKey := Trim(curKey)
     if (curKey != "") {
-        curKey := ConvertKey(curKey)
-        ; Retrieve the hold time for key n
         GuiControlGet, holdTime, 2:, KP_HoldTime%n%
-        SendInput, {%curKey% down}
-        Sleep, %holdTime%
-        SendInput, {%curKey% up}
+        if (curKey = "Ctrl+V") {
+            SendInput, {Ctrl down}
+            Sleep, 50
+            SendInput, {v down}
+            Sleep, holdTime
+            SendInput, {v up}
+            Sleep, 50
+            SendInput, {Ctrl up}
+        } else {
+            curKey := ConvertKey(curKey)
+            SendInput, {%curKey% down}
+            Sleep, holdTime
+            SendInput, {%curKey% up}
+        }
     }
 }
 
