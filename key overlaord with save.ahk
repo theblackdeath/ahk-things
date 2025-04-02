@@ -74,7 +74,7 @@ Prev_TriggerKey3 := ""
 ; -------------------------------------------------------------------
 ; INI file and Load/Save functions (removed repeat-related settings)
 ; -------------------------------------------------------------------
-IniFile := "settings.ini"
+IniFile := A_ScriptDir "\settings.ini"
 LoadSettings()
 
 LoadSettings() {
