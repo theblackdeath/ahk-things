@@ -14,6 +14,10 @@ global KeyHolderList := "up|down|left|right|space|f1|f2|f3|f4|f5|f6|f7|f8|f9|f10
 ; For Key Presser – note the added "enter" and "ctrl+v" at the end.
 global KeyPresserList := "|up|down|left|right|f1|f2|f3|f4|f5|f6|f7|f8|f9|f10|f11|f12|lbutton|rbutton|space|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|one|two|three|four|five|six|seven|eight|nine|zero|enter|ctrl+v"
 
+; --- New globals for Key Presser trigger key selection ---
+global KP_TriggerKeyList := "F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12"
+global DefaultKPTriggerKey := "F8"  ; will be loaded/saved via INI
+
 ; -------------------------------------------------------------------
 ; Helper: Convert words for digits to numeric keys.
 ; -------------------------------------------------------------------
@@ -72,7 +76,7 @@ Prev_TriggerKey2 := ""
 Prev_TriggerKey3 := ""
 
 ; -------------------------------------------------------------------
-; INI file and Load/Save functions (removed repeat-related settings)
+; INI file and Load/Save functions
 ; -------------------------------------------------------------------
 IniFile := A_ScriptDir "\settings.ini"
 LoadSettings()
@@ -87,6 +91,7 @@ LoadSettings() {
     global DefaultKey3, DefaultDelay3, DefaultHold3, DefaultMaxCount3, DefaultEnabled3
     global DefaultKey4, DefaultDelay4, DefaultHold4, DefaultMaxCount4, DefaultEnabled4
     global DefaultEnforce1, DefaultEnforce2, DefaultEnforce3, DefaultEnforce4
+    global DefaultKPTriggerKey
 
     ; --- Enter Commands ---
     IniRead, EC_FirstKey1,  %IniFile%, EnterCommands, FirstKey1, grave
@@ -253,6 +258,12 @@ LoadSettings() {
     if (DefaultEnforce4 = "")
         DefaultEnforce4 := 1
 
+    ; --- Key Presser trigger key ---
+    IniRead, DefaultKPTriggerKey, %IniFile%, KeyPresser, TriggerKey, F8
+    DefaultKPTriggerKey := Trim(DefaultKPTriggerKey)
+    if (DefaultKPTriggerKey = "")
+        DefaultKPTriggerKey := "F8"
+
     global KeyEnabled1, KeyEnabled2, KeyEnabled3, KeyEnabled4
     KeyEnabled1 := DefaultEnabled1
     KeyEnabled2 := DefaultEnabled2
@@ -270,49 +281,50 @@ SaveSettings() {
     global DefaultKey3, DefaultDelay3, DefaultHold3, DefaultMaxCount3, DefaultEnabled3
     global DefaultKey4, DefaultDelay4, DefaultHold4, DefaultMaxCount4, DefaultEnabled4
     global DefaultEnforce1, DefaultEnforce2, DefaultEnforce3, DefaultEnforce4
+    global DefaultKPTriggerKey
 
     ; --- Save Enter Commands ---
-    IniWrite, %EC_FirstKey1%,  %IniFile%, EnterCommands, FirstKey1
+    IniWrite, %EC_FirstKey1%, %IniFile%, EnterCommands, FirstKey1
     IniWrite, %EC_InputText1%, %IniFile%, EnterCommands, InputText1
     IniWrite, %EC_SecondKey1%, %IniFile%, EnterCommands, SecondKey1
-    IniWrite, %EC_TriggerKey1%,%IniFile%, EnterCommands, TriggerKey1
+    IniWrite, %EC_TriggerKey1%, %IniFile%, EnterCommands, TriggerKey1
 
-    IniWrite, %EC_FirstKey2%,  %IniFile%, EnterCommands, FirstKey2
+    IniWrite, %EC_FirstKey2%, %IniFile%, EnterCommands, FirstKey2
     IniWrite, %EC_InputText2%, %IniFile%, EnterCommands, InputText2
     IniWrite, %EC_SecondKey2%, %IniFile%, EnterCommands, SecondKey2
-    IniWrite, %EC_TriggerKey2%,%IniFile%, EnterCommands, TriggerKey2
+    IniWrite, %EC_TriggerKey2%, %IniFile%, EnterCommands, TriggerKey2
 
-    IniWrite, %EC_FirstKey3%,  %IniFile%, EnterCommands, FirstKey3
+    IniWrite, %EC_FirstKey3%, %IniFile%, EnterCommands, FirstKey3
     IniWrite, %EC_InputText3%, %IniFile%, EnterCommands, InputText3
     IniWrite, %EC_SecondKey3%, %IniFile%, EnterCommands, SecondKey3
-    IniWrite, %EC_TriggerKey3%,%IniFile%, EnterCommands, TriggerKey3
+    IniWrite, %EC_TriggerKey3%, %IniFile%, EnterCommands, TriggerKey3
 
     ; --- Save Key Holder ---
     IniWrite, %DefaultKHKey%, %IniFile%, KeyHolder, KeyChoice
 
     ; --- Save Key Presser ---
-    IniWrite, %DefaultKey1%,     %IniFile%, KeyPresser, Key1
-    IniWrite, %DefaultDelay1%,   %IniFile%, KeyPresser, Delay1
-    IniWrite, %DefaultHold1%,    %IniFile%, KeyPresser, Hold1
-    IniWrite, %DefaultMaxCount1%,%IniFile%, KeyPresser, MaxCount1
+    IniWrite, %DefaultKey1%, %IniFile%, KeyPresser, Key1
+    IniWrite, %DefaultDelay1%, %IniFile%, KeyPresser, Delay1
+    IniWrite, %DefaultHold1%, %IniFile%, KeyPresser, Hold1
+    IniWrite, %DefaultMaxCount1%, %IniFile%, KeyPresser, MaxCount1
     IniWrite, %DefaultEnabled1%, %IniFile%, KeyPresser, Enabled1
 
-    IniWrite, %DefaultKey2%,     %IniFile%, KeyPresser, Key2
-    IniWrite, %DefaultDelay2%,   %IniFile%, KeyPresser, Delay2
-    IniWrite, %DefaultHold2%,    %IniFile%, KeyPresser, Hold2
-    IniWrite, %DefaultMaxCount2%,%IniFile%, KeyPresser, MaxCount2
+    IniWrite, %DefaultKey2%, %IniFile%, KeyPresser, Key2
+    IniWrite, %DefaultDelay2%, %IniFile%, KeyPresser, Delay2
+    IniWrite, %DefaultHold2%, %IniFile%, KeyPresser, Hold2
+    IniWrite, %DefaultMaxCount2%, %IniFile%, KeyPresser, MaxCount2
     IniWrite, %DefaultEnabled2%, %IniFile%, KeyPresser, Enabled2
 
-    IniWrite, %DefaultKey3%,     %IniFile%, KeyPresser, Key3
-    IniWrite, %DefaultDelay3%,   %IniFile%, KeyPresser, Delay3
-    IniWrite, %DefaultHold3%,    %IniFile%, KeyPresser, Hold3
-    IniWrite, %DefaultMaxCount3%,%IniFile%, KeyPresser, MaxCount3
+    IniWrite, %DefaultKey3%, %IniFile%, KeyPresser, Key3
+    IniWrite, %DefaultDelay3%, %IniFile%, KeyPresser, Delay3
+    IniWrite, %DefaultHold3%, %IniFile%, KeyPresser, Hold3
+    IniWrite, %DefaultMaxCount3%, %IniFile%, KeyPresser, MaxCount3
     IniWrite, %DefaultEnabled3%, %IniFile%, KeyPresser, Enabled3
 
-    IniWrite, %DefaultKey4%,     %IniFile%, KeyPresser, Key4
-    IniWrite, %DefaultDelay4%,   %IniFile%, KeyPresser, Delay4
-    IniWrite, %DefaultHold4%,    %IniFile%, KeyPresser, Hold4
-    IniWrite, %DefaultMaxCount4%,%IniFile%, KeyPresser, MaxCount4
+    IniWrite, %DefaultKey4%, %IniFile%, KeyPresser, Key4
+    IniWrite, %DefaultDelay4%, %IniFile%, KeyPresser, Delay4
+    IniWrite, %DefaultHold4%, %IniFile%, KeyPresser, Hold4
+    IniWrite, %DefaultMaxCount4%, %IniFile%, KeyPresser, MaxCount4
     IniWrite, %DefaultEnabled4%, %IniFile%, KeyPresser, Enabled4
 
     ; Enforce checkboxes
@@ -320,6 +332,9 @@ SaveSettings() {
     IniWrite, %DefaultEnforce2%, %IniFile%, KeyPresser, Enforce2
     IniWrite, %DefaultEnforce3%, %IniFile%, KeyPresser, Enforce3
     IniWrite, %DefaultEnforce4%, %IniFile%, KeyPresser, Enforce4
+
+    ; --- Save Key Presser Trigger Key ---
+    IniWrite, %DefaultKPTriggerKey%, %IniFile%, KeyPresser, TriggerKey
 }
 
 ; -------------------------------------------------------------------
@@ -537,11 +552,9 @@ OpenKeyHolder:
     ; Use SetExactChoice to restore the saved value exactly:
     SetExactChoice("KH_KeyChoice", DefaultKHKey, KeyHolderList)
 
-    
     Gui 3:Show, w250 h200, Key Hold Automation
     Hotkey, F8, KH_Toggle, On
 Return
-
 
 CloseKeyHolder:
     Gui 3:Submit, NoHide
@@ -592,51 +605,56 @@ OpenKeyPresser:
     Gui 2:Destroy
     Gui 2:Default
 
+    ; -- NEW: Trigger key controls (adjusted coordinates and height) --
+    Gui 2:Add, Text, x20 y10 w100 h20, Trigger Key:
+    Gui 2:Add, DropDownList, vKP_TriggerKey x130 y10 w100 h150, %KP_TriggerKeyList%
+    Gui 2:Add, Button, x240 y10 w100 h20 gKP_ApplyTrigger, Apply Trigger
+    Gui 2:Add, Text, vKP_TriggerLabel x20 y40 w300 h20, Press %DefaultKPTriggerKey% to start/stop key presses:
+    
     KeyOptions := KeyPresserList  ; Global variable including "enter" and "ctrl+v"
-    Gui 2:Add, Text, x20 y20 w200 h20, Press F8 to start/stop key presses:
-
+    
     ; --- KEY 1 ---
-    Gui 2:Add, Text, x20 y40 w100 h20, Key 1:
-    Gui 2:Add, DropDownList, vKP_KeyChoice1 x120 y40 w100, %KeyOptions%
-    Gui 2:Add, Text, x20 y70 w100 h20, Delay 1 (ms):
-    Gui 2:Add, Edit, vKP_DelayInput1 x120 y70 w100 h20, %DefaultDelay1%
-    Gui 2:Add, Text, x20 y100 w100 h20, Hold Time 1 (ms):
-    Gui 2:Add, Edit, vKP_HoldTime1 x120 y100 w100 h20, %DefaultHold1%
-    Gui 2:Add, Text, x20 y130 w100 h20, Max Count 1:
-    Gui 2:Add, Edit, vKP_MaxCount1 x120 y130 w100 h20, %DefaultMaxCount1%
+    Gui 2:Add, Text, x20 y70 w100 h20, Key 1:
+    Gui 2:Add, DropDownList, vKP_KeyChoice1 x120 y70 w100, %KeyOptions%
+    Gui 2:Add, Text, x20 y100 w100 h20, Delay 1 (ms):
+    Gui 2:Add, Edit, vKP_DelayInput1 x120 y100 w100 h20, %DefaultDelay1%
+    Gui 2:Add, Text, x20 y130 w100 h20, Hold Time 1 (ms):
+    Gui 2:Add, Edit, vKP_HoldTime1 x120 y130 w100 h20, %DefaultHold1%
+    Gui 2:Add, Text, x20 y160 w100 h20, Max Count 1:
+    Gui 2:Add, Edit, vKP_MaxCount1 x120 y160 w100 h20, %DefaultMaxCount1%
     enforceState1 := (DefaultEnforce1 = 1 ? "Checked" : "")
-    Gui 2:Add, CheckBox, vKP_MaxCountEnabled1 x230 y130 w120 h20 %enforceState1%, Enforce
-    Gui 2:Add, Button, vKP_Button1 gKP_ToggleKey1 x120 y160 w100 h20, % (KeyEnabled1 ? "Enabled" : "Disabled")
-
+    Gui 2:Add, CheckBox, vKP_MaxCountEnabled1 x230 y160 w120 h20 %enforceState1%, Enforce
+    Gui 2:Add, Button, vKP_Button1 gKP_ToggleKey1 x120 y190 w100 h20, % (KeyEnabled1 ? "Enabled" : "Disabled")
+    
     ; --- KEY 2 ---
-    Gui 2:Add, Text, x20 y200 w100 h20, Key 2:
-    Gui 2:Add, DropDownList, vKP_KeyChoice2 x120 y200 w100, %KeyOptions%
-    Gui 2:Add, Text, x20 y230 w100 h20, Delay 2 (ms):
-    Gui 2:Add, Edit, vKP_DelayInput2 x120 y230 w100 h20, %DefaultDelay2%
-    Gui 2:Add, Text, x20 y260 w100 h20, Hold Time 2 (ms):
-    Gui 2:Add, Edit, vKP_HoldTime2 x120 y260 w100 h20, %DefaultHold2%
-    Gui 2:Add, Text, x20 y290 w100 h20, Max Count 2:
-    Gui 2:Add, Edit, vKP_MaxCount2 x120 y290 w100 h20, %DefaultMaxCount2%
+    Gui 2:Add, Text, x20 y220 w100 h20, Key 2:
+    Gui 2:Add, DropDownList, vKP_KeyChoice2 x120 y220 w100 h20, %KeyOptions%
+    Gui 2:Add, Text, x20 y250 w100 h20, Delay 2 (ms):
+    Gui 2:Add, Edit, vKP_DelayInput2 x120 y250 w100 h20, %DefaultDelay2%
+    Gui 2:Add, Text, x20 y280 w100 h20, Hold Time 2 (ms):
+    Gui 2:Add, Edit, vKP_HoldTime2 x120 y280 w100 h20, %DefaultHold2%
+    Gui 2:Add, Text, x20 y310 w100 h20, Max Count 2:
+    Gui 2:Add, Edit, vKP_MaxCount2 x120 y311 w100 h20, %DefaultMaxCount2%
     enforceState2 := (DefaultEnforce2 = 1 ? "Checked" : "")
-    Gui 2:Add, CheckBox, vKP_MaxCountEnabled2 x230 y290 w120 h20 %enforceState2%, Enforce
-    Gui 2:Add, Button, vKP_Button2 gKP_ToggleKey2 x120 y320 w100 h20, % (KeyEnabled2 ? "Enabled" : "Disabled")
-
+    Gui 2:Add, CheckBox, vKP_MaxCountEnabled2 x230 y310 w120 h20 %enforceState2%, Enforce
+    Gui 2:Add, Button, vKP_Button2 gKP_ToggleKey2 x120 y340 w100 h20, % (KeyEnabled2 ? "Enabled" : "Disabled")
+    
     ; --- KEY 3 ---
-    Gui 2:Add, Text, x20 y360 w100 h20, Key 3:
-    Gui 2:Add, DropDownList, vKP_KeyChoice3 x120 y360 w100, %KeyOptions%
-    Gui 2:Add, Text, x20 y390 w100 h20, Delay 3 (ms):
-    Gui 2:Add, Edit, vKP_DelayInput3 x120 y390 w100 h20, %DefaultDelay3%
-    Gui 2:Add, Text, x20 y420 w100 h20, Hold Time 3 (ms):
-    Gui 2:Add, Edit, vKP_HoldTime3 x120 y420 w100 h20, %DefaultHold3%
-    Gui 2:Add, Text, x20 y450 w100 h20, Max Count 3:
-    Gui 2:Add, Edit, vKP_MaxCount3 x120 y450 w100 h20, %DefaultMaxCount3%
+    Gui 2:Add, Text, x20 y370 w100 h20, Key 3:
+    Gui 2:Add, DropDownList, vKP_KeyChoice3 x120 y370 w100 h20, %KeyOptions%
+    Gui 2:Add, Text, x20 y400 w100 h20, Delay 3 (ms):
+    Gui 2:Add, Edit, vKP_DelayInput3 x120 y400 w100 h20, %DefaultDelay3%
+    Gui 2:Add, Text, x20 y430 w100 h20, Hold Time 3 (ms):
+    Gui 2:Add, Edit, vKP_HoldTime3 x120 y430 w100 h20, %DefaultHold3%
+    Gui 2:Add, Text, x20 y460 w100 h20, Max Count 3:
+    Gui 2:Add, Edit, vKP_MaxCount3 x120 y460 w100 h20, %DefaultMaxCount3%
     enforceState3 := (DefaultEnforce3 = 1 ? "Checked" : "")
-    Gui 2:Add, CheckBox, vKP_MaxCountEnabled3 x230 y450 w120 h20 %enforceState3%, Enforce
-    Gui 2:Add, Button, vKP_Button3 gKP_ToggleKey3 x120 y480 w100 h20, % (KeyEnabled3 ? "Enabled" : "Disabled")
-
+    Gui 2:Add, CheckBox, vKP_MaxCountEnabled3 x230 y460 w120 h20 %enforceState3%, Enforce
+    Gui 2:Add, Button, vKP_Button3 gKP_ToggleKey3 x120 y490 w100 h20, % (KeyEnabled3 ? "Enabled" : "Disabled")
+    
     ; --- KEY 4 ---
     Gui 2:Add, Text, x20 y520 w100 h20, Key 4:
-    Gui 2:Add, DropDownList, vKP_KeyChoice4 x120 y520 w100, %KeyOptions%
+    Gui 2:Add, DropDownList, vKP_KeyChoice4 x120 y520 w100 h20, %KeyOptions%
     Gui 2:Add, Text, x20 y550 w100 h20, Delay 4 (ms):
     Gui 2:Add, Edit, vKP_DelayInput4 x120 y550 w100 h20, %DefaultDelay4%
     Gui 2:Add, Text, x20 y580 w100 h20, Hold Time 4 (ms):
@@ -646,66 +664,39 @@ OpenKeyPresser:
     enforceState4 := (DefaultEnforce4 = 1 ? "Checked" : "")
     Gui 2:Add, CheckBox, vKP_MaxCountEnabled4 x230 y610 w120 h20 %enforceState4%, Enforce
     Gui 2:Add, Button, vKP_Button4 gKP_ToggleKey4 x120 y640 w100 h20, % (KeyEnabled4 ? "Enabled" : "Disabled")
-
+    
     ; --- Back Button ---
-    Gui 2:Add, Button, gCloseKeyPresser x20 y750 w80 h30, Back
-
+    Gui 2:Add, Button, gCloseKeyPresser x20 y710 w80 h30, Back
+    
     ; Force the dropdowns to show the stored values:
     GuiControl, ChooseString, KP_KeyChoice1, %DefaultKey1%
     GuiControl, ChooseString, KP_KeyChoice2, %DefaultKey2%
     GuiControl, ChooseString, KP_KeyChoice3, %DefaultKey3%
     GuiControl, ChooseString, KP_KeyChoice4, %DefaultKey4%
-
-    Gui 2:Show, w370 h800, Key Press Automation
-    Hotkey, F8, KP_Toggle, On
+    GuiControl, ChooseString, KP_TriggerKey, %DefaultKPTriggerKey%
+    
+    ; Set the hotkey based on the current trigger key:
+    Hotkey, %DefaultKPTriggerKey%, KP_Toggle, On
+    
+    Gui 2:Show, w370 h760, Key Press Automation
 Return
 
-CloseKeyPresser:
+; -----------------------------------------------------------
+; Label: Update the trigger key for Key Presser on the fly
+KP_ApplyTrigger:
     Gui 2:Submit, NoHide
-
-    ; Save current Key Presser settings from the GUI controls:
-    DefaultKey1 := KP_KeyChoice1
-    DefaultDelay1 := KP_DelayInput1
-    DefaultHold1  := KP_HoldTime1
-    DefaultMaxCount1 := KP_MaxCount1
-
-    DefaultKey2 := KP_KeyChoice2
-    DefaultDelay2 := KP_DelayInput2
-    DefaultHold2  := KP_HoldTime2
-    DefaultMaxCount2 := KP_MaxCount2
-
-    DefaultKey3 := KP_KeyChoice3
-    DefaultDelay3 := KP_DelayInput3
-    DefaultHold3  := KP_HoldTime3
-    DefaultMaxCount3 := KP_MaxCount3
-
-    DefaultKey4 := KP_KeyChoice4
-    DefaultDelay4 := KP_DelayInput4
-    DefaultHold4  := KP_HoldTime4
-    DefaultMaxCount4 := KP_MaxCount4
-
-    DefaultEnabled1 := KeyEnabled1
-    DefaultEnabled2 := KeyEnabled2
-    DefaultEnabled3 := KeyEnabled3
-    DefaultEnabled4 := KeyEnabled4
-
-    GuiControlGet, DefaultEnforce1, 2:, KP_MaxCountEnabled1
-    GuiControlGet, DefaultEnforce2, 2:, KP_MaxCountEnabled2
-    GuiControlGet, DefaultEnforce3, 2:, KP_MaxCountEnabled3
-    GuiControlGet, DefaultEnforce4, 2:, KP_MaxCountEnabled4
-
-    SaveSettings()
-    if (KP_Running) {
-        KP_StopAutomation()
-    }
-    Hotkey, F8, Off
-    Gui 2:Destroy
-    Gui 1:Show
-    UpdateStatusBox()
+    ; Remove the old hotkey (using the stored trigger key)
+    Hotkey, %DefaultKPTriggerKey%, Off
+    ; Update the global variable with the new trigger key selection
+    DefaultKPTriggerKey := KP_TriggerKey
+    ; Update the label to reflect the new trigger key
+    GuiControl, 2:, KP_TriggerLabel, Press %DefaultKPTriggerKey% to start/stop key presses:
+    ; Register the new hotkey
+    Hotkey, %DefaultKPTriggerKey%, KP_Toggle, On
 Return
 
-
-; F8 toggles Key Presser automation
+; -----------------------------------------------------------
+; The trigger (selected key) toggles Key Presser automation
 KP_Toggle:
     global KP_Running, KeyEnabled1, KeyEnabled2, KeyEnabled3, KeyEnabled4
     if (KeyEnabled1 = 0 and KeyEnabled2 = 0 and KeyEnabled3 = 0 and KeyEnabled4 = 0) {
@@ -983,3 +974,50 @@ GuiClose:
 4GuiClose:
     SaveSettings()
     ExitApp
+
+; -------------------------------------------------------------------
+; CloseKeyPresser: 
+; -------------------------------------------------------------------
+CloseKeyPresser:
+    Gui 2:Submit, NoHide
+    ; Save current Key Presser settings from the GUI controls:
+    DefaultKey1 := KP_KeyChoice1
+    DefaultDelay1 := KP_DelayInput1
+    DefaultHold1  := KP_HoldTime1
+    DefaultMaxCount1 := KP_MaxCount1
+
+    DefaultKey2 := KP_KeyChoice2
+    DefaultDelay2 := KP_DelayInput2
+    DefaultHold2  := KP_HoldTime2
+    DefaultMaxCount2 := KP_MaxCount2
+
+    DefaultKey3 := KP_KeyChoice3
+    DefaultDelay3 := KP_DelayInput3
+    DefaultHold3  := KP_HoldTime3
+    DefaultMaxCount3 := KP_MaxCount3
+
+    DefaultKey4 := KP_KeyChoice4
+    DefaultDelay4 := KP_DelayInput4
+    DefaultHold4  := KP_HoldTime4
+    DefaultMaxCount4 := KP_MaxCount4
+
+    DefaultEnabled1 := KeyEnabled1
+    DefaultEnabled2 := KeyEnabled2
+    DefaultEnabled3 := KeyEnabled3
+    DefaultEnabled4 := KeyEnabled4
+
+    GuiControlGet, DefaultEnforce1, 2:, KP_MaxCountEnabled1
+    GuiControlGet, DefaultEnforce2, 2:, KP_MaxCountEnabled2
+    GuiControlGet, DefaultEnforce3, 2:, KP_MaxCountEnabled3
+    GuiControlGet, DefaultEnforce4, 2:, KP_MaxCountEnabled4
+
+    SaveSettings()
+    if (KP_Running) {
+        KP_StopAutomation()
+    }
+    ; Remove the trigger hotkey using the currently stored key
+    Hotkey, %DefaultKPTriggerKey%, Off
+    Gui 2:Destroy
+    Gui 1:Show
+    UpdateStatusBox()
+Return
