@@ -458,7 +458,7 @@ OpenEnterCommands:
     Gui 4:Add, DropDownList, vEC_TriggerKey1 x150 y140 w200, %EnterCommandsTriggerList%
 
     Gui 4:Add, CheckBox, vLoop1 x370 y140 w60 h20 %checkedLoop1%, Loop
-    Gui 4:Add, Text, x430 y140 w60 h20, Delay (ms):
+    Gui 4:Add, Text, x430 y140 w60 h20, Sleep (ms):
     Gui 4:Add, Edit, vDelay1 x500 y140 w60 h20, %Delay1%
 
     ; --- SECOND SEQUENCE ---
@@ -479,7 +479,7 @@ OpenEnterCommands:
     Gui 4:Add, DropDownList, vEC_TriggerKey2 x150 y300 w200 h20, %EnterCommandsTriggerList%
 
     Gui 4:Add, CheckBox, vLoop2 x370 y300 w60 h20 %checkedLoop2%, Loop
-    Gui 4:Add, Text, x430 y300 w60 h20, Delay (ms):
+    Gui 4:Add, Text, x430 y300 w60 h20, Sleep (ms):
     Gui 4:Add, Edit, vDelay2 x500 y300 w60 h20, %Delay2%
 
     ; --- THIRD SEQUENCE ---
@@ -500,7 +500,7 @@ OpenEnterCommands:
     Gui 4:Add, DropDownList, vEC_TriggerKey3 x150 y460 w200 h20, %EnterCommandsTriggerList%
 
     Gui 4:Add, CheckBox, vLoop3 x370 y460 w60 h20 %checkedLoop3%, Loop
-    Gui 4:Add, Text, x430 y460 w60 h20, Delay (ms):
+    Gui 4:Add, Text, x430 y460 w60 h20, Sleep (ms):
     Gui 4:Add, Edit, vDelay3 x500 y460 w60 h20, %Delay3%
 
     ; Buttons (placed below the sequences)
