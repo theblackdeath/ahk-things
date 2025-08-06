@@ -630,7 +630,7 @@ OpenKeyPresser:
     
     ; --- KEY 2 ---
     Gui 2:Add, Text, x20 y220 w100 h20, Key 2:
-    Gui 2:Add, DropDownList, vKP_KeyChoice2 x120 y220 w100 h20, %KeyOptions%
+    Gui 2:Add, DropDownList, vKP_KeyChoice2 x120 y220 w100, %KeyOptions%
     Gui 2:Add, Text, x20 y250 w100 h20, Delay 2 (ms):
     Gui 2:Add, Edit, vKP_DelayInput2 x120 y250 w100 h20, %DefaultDelay2%
     Gui 2:Add, Text, x20 y280 w100 h20, Hold Time 2 (ms):
@@ -643,7 +643,7 @@ OpenKeyPresser:
     
     ; --- KEY 3 ---
     Gui 2:Add, Text, x20 y370 w100 h20, Key 3:
-    Gui 2:Add, DropDownList, vKP_KeyChoice3 x120 y370 w100 h20, %KeyOptions%
+    Gui 2:Add, DropDownList, vKP_KeyChoice3 x120 y370 w100, %KeyOptions%
     Gui 2:Add, Text, x20 y400 w100 h20, Delay 3 (ms):
     Gui 2:Add, Edit, vKP_DelayInput3 x120 y400 w100 h20, %DefaultDelay3%
     Gui 2:Add, Text, x20 y430 w100 h20, Hold Time 3 (ms):
@@ -656,7 +656,7 @@ OpenKeyPresser:
     
     ; --- KEY 4 ---
     Gui 2:Add, Text, x20 y520 w100 h20, Key 4:
-    Gui 2:Add, DropDownList, vKP_KeyChoice4 x120 y520 w100 h20, %KeyOptions%
+    Gui 2:Add, DropDownList, vKP_KeyChoice4 x120 y520 w100, %KeyOptions%
     Gui 2:Add, Text, x20 y550 w100 h20, Delay 4 (ms):
     Gui 2:Add, Edit, vKP_DelayInput4 x120 y550 w100 h20, %DefaultDelay4%
     Gui 2:Add, Text, x20 y580 w100 h20, Hold Time 4 (ms):
